@@ -5,6 +5,7 @@ import propTypes from "prop-types";
 const Button = (props) => {
   const className = props.className;
 
+  // logic untuk inject className
   if (props.isPrimary) className.push("btn-primary");
   if (props.isSmall) className.push("btn-sm");
   if (props.isLarge) className.push("btn-lg");
@@ -16,7 +17,7 @@ const Button = (props) => {
     if (props.onClick) props.onClick();
   };
 
-  // rendering option (link external (a) or link internal (link))
+  // rendering link option (link external (a) or link internal (link))
   if (props.type === "link") {
     // link external (a)
     if (props.isExternal) {
@@ -44,7 +45,33 @@ const Button = (props) => {
     }
   }
 
-  return <div></div>;
+  // rendering isDisabled atau isLoading
+  if (props.isDisabled || props.isLoading) {
+    // inject className "disable"
+    if (props.isDisabled) className.push("disabled");
+    return (
+      <span className={className.join(" ")} style={props.style}>
+        {props.isLoading ? (
+          <>
+            <span className="spinner-border spinner-border-sm mx-5"></span>
+            <span className="sr-only">Loading...</span>
+          </>
+        ) : (
+          props.children
+        )}
+      </span>
+    );
+  }
+
+  return (
+    <button
+      className={className.join(" ")}
+      style={props.style}
+      onClick={onClick}
+    >
+      {props.children}
+    </button>
+  );
 };
 
 Button.propTypes = {
